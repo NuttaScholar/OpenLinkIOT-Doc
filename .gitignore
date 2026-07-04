@@ -1,1 +1,4 @@
 privacy-policy-workflow.md
+node_modules/
+dist/
+dist-ssr/
