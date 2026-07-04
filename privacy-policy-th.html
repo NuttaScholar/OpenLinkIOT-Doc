@@ -39,6 +39,7 @@
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", "Noto Sans Thai", sans-serif;
         line-height: 1.75;
+        overflow-wrap: break-word;
       }
 
       .page {
@@ -56,6 +57,7 @@
       }
 
       .app-icon {
+        display: block;
         width: 76px;
         height: 76px;
         border-radius: 18px;
@@ -112,6 +114,11 @@
         grid-template-columns: 270px 1fr;
         gap: 24px;
         align-items: start;
+      }
+
+      header > *,
+      .layout > * {
+        min-width: 0;
       }
 
       nav,
@@ -223,6 +230,7 @@
 
       .table-wrap {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border: 1px solid var(--line);
         border-radius: 8px;
         margin-top: 14px;
@@ -278,7 +286,7 @@
 
       @media (max-width: 900px) {
         .page {
-          padding: 22px 14px 42px;
+          padding: 22px max(14px, env(safe-area-inset-right)) 42px max(14px, env(safe-area-inset-left));
         }
 
         header,
@@ -293,6 +301,158 @@
 
         nav {
           position: static;
+        }
+      }
+
+      @media (max-width: 600px) {
+        body {
+          line-height: 1.68;
+        }
+
+        header {
+          grid-template-columns: auto 1fr;
+          gap: 14px;
+          padding: 14px 0 18px;
+        }
+
+        .app-icon {
+          width: 58px;
+          height: 58px;
+          border-radius: 14px;
+        }
+
+        .eyebrow {
+          font-size: 0.74rem;
+        }
+
+        h1 {
+          font-size: clamp(1.72rem, 9vw, 2.22rem);
+        }
+
+        .subtitle {
+          font-size: 0.96rem;
+        }
+
+        .language-switch {
+          grid-column: 1 / -1;
+          width: 100%;
+        }
+
+        .language-switch a {
+          flex: 1;
+        }
+
+        nav {
+          display: flex;
+          gap: 8px;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: auto;
+          overflow-y: hidden;
+          padding: 12px;
+          scroll-snap-type: x proximity;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        nav p {
+          flex: 0 0 auto;
+          margin: 0;
+          padding: 8px 2px;
+        }
+
+        nav a {
+          flex: 0 0 auto;
+          min-height: 38px;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          padding: 7px 12px;
+          background: #ffffff;
+          scroll-snap-align: start;
+          white-space: nowrap;
+        }
+
+        article {
+          padding: 18px 14px;
+        }
+
+        section + section {
+          margin-top: 26px;
+          padding-top: 24px;
+        }
+
+        .summary-item {
+          min-height: 0;
+          padding: 14px;
+        }
+
+        .notice {
+          padding: 12px 13px;
+        }
+
+        .table-wrap {
+          overflow: visible;
+          border: 0;
+          border-radius: 0;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+          display: block;
+          width: 100%;
+          min-width: 0;
+        }
+
+        thead {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0 0 0 0);
+        }
+
+        table {
+          background: transparent;
+        }
+
+        tr {
+          border: 1px solid var(--line);
+          border-radius: 8px;
+          background: #ffffff;
+          overflow: hidden;
+        }
+
+        tr + tr {
+          margin-top: 12px;
+        }
+
+        td {
+          display: grid;
+          grid-template-columns: 120px 1fr;
+          gap: 12px;
+          padding: 12px;
+          border-bottom: 1px solid var(--line);
+        }
+
+        td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font-size: 0.8rem;
+          font-weight: 700;
+        }
+
+        td:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      @media (max-width: 380px) {
+        td {
+          grid-template-columns: 1fr;
+          gap: 4px;
         }
       }
     </style>
@@ -374,34 +534,34 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>ข้อมูล Device Group</td>
-                    <td>ชื่อกลุ่ม, รูปแบบสีหรือ style index</td>
-                    <td>ผู้ใช้สร้างหรือแก้ไขในแอป</td>
-                    <td>เก็บใน SQLite บนอุปกรณ์</td>
+                    <td data-label="ประเภทข้อมูล">ข้อมูล Device Group</td>
+                    <td data-label="ตัวอย่าง">ชื่อกลุ่ม, รูปแบบสีหรือ style index</td>
+                    <td data-label="แหล่งที่มา">ผู้ใช้สร้างหรือแก้ไขในแอป</td>
+                    <td data-label="การจัดเก็บ">เก็บใน SQLite บนอุปกรณ์</td>
                   </tr>
                   <tr>
-                    <td>ข้อมูลอุปกรณ์ IoT</td>
-                    <td>ชื่ออุปกรณ์, MAC address, ประเภทอุปกรณ์, สถานะ setup, IP address, port</td>
-                    <td>UDP discovery และข้อมูล device profile จากอุปกรณ์</td>
-                    <td>อุปกรณ์ที่ตั้งค่าแล้วจะถูกเก็บใน SQLite บนอุปกรณ์</td>
+                    <td data-label="ประเภทข้อมูล">ข้อมูลอุปกรณ์ IoT</td>
+                    <td data-label="ตัวอย่าง">ชื่ออุปกรณ์, MAC address, ประเภทอุปกรณ์, สถานะ setup, IP address, port</td>
+                    <td data-label="แหล่งที่มา">UDP discovery และข้อมูล device profile จากอุปกรณ์</td>
+                    <td data-label="การจัดเก็บ">อุปกรณ์ที่ตั้งค่าแล้วจะถูกเก็บใน SQLite บนอุปกรณ์</td>
                   </tr>
                   <tr>
-                    <td>ข้อมูลการควบคุมอุปกรณ์</td>
-                    <td>สถานะ power, component ID, ชื่อ component, options, notify message, shadow state</td>
-                    <td>ข้อมูลตอบกลับจากอุปกรณ์ IoT หรือ NETPIE shadow data</td>
-                    <td>component metadata ถูกเก็บในเครื่อง ส่วน live state ใช้เพื่อแสดงผลและ refresh</td>
+                    <td data-label="ประเภทข้อมูล">ข้อมูลการควบคุมอุปกรณ์</td>
+                    <td data-label="ตัวอย่าง">สถานะ power, component ID, ชื่อ component, options, notify message, shadow state</td>
+                    <td data-label="แหล่งที่มา">ข้อมูลตอบกลับจากอุปกรณ์ IoT หรือ NETPIE shadow data</td>
+                    <td data-label="การจัดเก็บ">component metadata ถูกเก็บในเครื่อง ส่วน live state ใช้เพื่อแสดงผลและ refresh</td>
                   </tr>
                   <tr>
-                    <td>ข้อมูลยืนยันตัวตนและ NETPIE</td>
-                    <td>รหัสผ่านอุปกรณ์แบบ hash, NETPIE Client ID, NETPIE token/password</td>
-                    <td>ข้อมูลจากผู้ใช้และ device profile</td>
-                    <td>เก็บใน SQLite เพื่อให้แอปควบคุมอุปกรณ์ที่ตั้งค่าไว้ได้ในภายหลัง</td>
+                    <td data-label="ประเภทข้อมูล">ข้อมูลยืนยันตัวตนและ NETPIE</td>
+                    <td data-label="ตัวอย่าง">รหัสผ่านอุปกรณ์แบบ hash, NETPIE Client ID, NETPIE token/password</td>
+                    <td data-label="แหล่งที่มา">ข้อมูลจากผู้ใช้และ device profile</td>
+                    <td data-label="การจัดเก็บ">เก็บใน SQLite เพื่อให้แอปควบคุมอุปกรณ์ที่ตั้งค่าไว้ได้ในภายหลัง</td>
                   </tr>
                   <tr>
-                    <td>ข้อมูล WiFi ระหว่าง setup</td>
-                    <td>SSID, รหัสผ่าน WiFi, security flag, signal strength</td>
-                    <td>ผลสแกน WiFi จากอุปกรณ์และข้อมูลที่ผู้ใช้กรอก</td>
-                    <td>รหัสผ่าน WiFi ถูกส่งให้อุปกรณ์ระหว่าง setup และ flow ปัจจุบันไม่ได้บันทึกลง SQLite</td>
+                    <td data-label="ประเภทข้อมูล">ข้อมูล WiFi ระหว่าง setup</td>
+                    <td data-label="ตัวอย่าง">SSID, รหัสผ่าน WiFi, security flag, signal strength</td>
+                    <td data-label="แหล่งที่มา">ผลสแกน WiFi จากอุปกรณ์และข้อมูลที่ผู้ใช้กรอก</td>
+                    <td data-label="การจัดเก็บ">รหัสผ่าน WiFi ถูกส่งให้อุปกรณ์ระหว่าง setup และ flow ปัจจุบันไม่ได้บันทึกลง SQLite</td>
                   </tr>
                 </tbody>
               </table>

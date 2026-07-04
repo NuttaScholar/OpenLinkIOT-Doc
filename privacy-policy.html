@@ -39,6 +39,7 @@
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", "Noto Sans Thai", sans-serif;
         line-height: 1.65;
+        overflow-wrap: break-word;
       }
 
       .page {
@@ -56,6 +57,7 @@
       }
 
       .app-icon {
+        display: block;
         width: 76px;
         height: 76px;
         border-radius: 18px;
@@ -112,6 +114,11 @@
         grid-template-columns: 270px 1fr;
         gap: 24px;
         align-items: start;
+      }
+
+      header > *,
+      .layout > * {
+        min-width: 0;
       }
 
       nav,
@@ -223,6 +230,7 @@
 
       .table-wrap {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border: 1px solid var(--line);
         border-radius: 8px;
         margin-top: 14px;
@@ -278,7 +286,7 @@
 
       @media (max-width: 900px) {
         .page {
-          padding: 22px 14px 42px;
+          padding: 22px max(14px, env(safe-area-inset-right)) 42px max(14px, env(safe-area-inset-left));
         }
 
         header,
@@ -293,6 +301,158 @@
 
         nav {
           position: static;
+        }
+      }
+
+      @media (max-width: 600px) {
+        body {
+          line-height: 1.58;
+        }
+
+        header {
+          grid-template-columns: auto 1fr;
+          gap: 14px;
+          padding: 14px 0 18px;
+        }
+
+        .app-icon {
+          width: 58px;
+          height: 58px;
+          border-radius: 14px;
+        }
+
+        .eyebrow {
+          font-size: 0.74rem;
+        }
+
+        h1 {
+          font-size: clamp(1.78rem, 10vw, 2.35rem);
+        }
+
+        .subtitle {
+          font-size: 0.96rem;
+        }
+
+        .language-switch {
+          grid-column: 1 / -1;
+          width: 100%;
+        }
+
+        .language-switch a {
+          flex: 1;
+        }
+
+        nav {
+          display: flex;
+          gap: 8px;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: auto;
+          overflow-y: hidden;
+          padding: 12px;
+          scroll-snap-type: x proximity;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        nav p {
+          flex: 0 0 auto;
+          margin: 0;
+          padding: 8px 2px;
+        }
+
+        nav a {
+          flex: 0 0 auto;
+          min-height: 38px;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          padding: 7px 12px;
+          background: #ffffff;
+          scroll-snap-align: start;
+          white-space: nowrap;
+        }
+
+        article {
+          padding: 18px 14px;
+        }
+
+        section + section {
+          margin-top: 26px;
+          padding-top: 24px;
+        }
+
+        .summary-item {
+          min-height: 0;
+          padding: 14px;
+        }
+
+        .notice {
+          padding: 12px 13px;
+        }
+
+        .table-wrap {
+          overflow: visible;
+          border: 0;
+          border-radius: 0;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+          display: block;
+          width: 100%;
+          min-width: 0;
+        }
+
+        thead {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0 0 0 0);
+        }
+
+        table {
+          background: transparent;
+        }
+
+        tr {
+          border: 1px solid var(--line);
+          border-radius: 8px;
+          background: #ffffff;
+          overflow: hidden;
+        }
+
+        tr + tr {
+          margin-top: 12px;
+        }
+
+        td {
+          display: grid;
+          grid-template-columns: 120px 1fr;
+          gap: 12px;
+          padding: 12px;
+          border-bottom: 1px solid var(--line);
+        }
+
+        td::before {
+          content: attr(data-label);
+          color: var(--muted);
+          font-size: 0.8rem;
+          font-weight: 700;
+        }
+
+        td:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      @media (max-width: 380px) {
+        td {
+          grid-template-columns: 1fr;
+          gap: 4px;
         }
       }
     </style>
@@ -375,34 +535,34 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Device group data</td>
-                    <td>Group name, color or style index</td>
-                    <td>User-created in the app</td>
-                    <td>Stored in local SQLite</td>
+                    <td data-label="Data type">Device group data</td>
+                    <td data-label="Examples">Group name, color or style index</td>
+                    <td data-label="Source">User-created in the app</td>
+                    <td data-label="Storage">Stored in local SQLite</td>
                   </tr>
                   <tr>
-                    <td>IoT device data</td>
-                    <td>Device name, MAC address, device type, setup status, IP address, port</td>
-                    <td>UDP discovery and device profile responses</td>
-                    <td>Configured devices are stored in local SQLite</td>
+                    <td data-label="Data type">IoT device data</td>
+                    <td data-label="Examples">Device name, MAC address, device type, setup status, IP address, port</td>
+                    <td data-label="Source">UDP discovery and device profile responses</td>
+                    <td data-label="Storage">Configured devices are stored in local SQLite</td>
                   </tr>
                   <tr>
-                    <td>Device control data</td>
-                    <td>Power state, component ID, component name, options, notify message, shadow state</td>
-                    <td>IoT device responses or NETPIE shadow data</td>
-                    <td>Component metadata is stored locally; live state is used for display and refresh</td>
+                    <td data-label="Data type">Device control data</td>
+                    <td data-label="Examples">Power state, component ID, component name, options, notify message, shadow state</td>
+                    <td data-label="Source">IoT device responses or NETPIE shadow data</td>
+                    <td data-label="Storage">Component metadata is stored locally; live state is used for display and refresh</td>
                   </tr>
                   <tr>
-                    <td>Device authentication and NETPIE credentials</td>
-                    <td>Hashed device password, NETPIE Client ID, NETPIE token or password</td>
-                    <td>User input and device profile data</td>
-                    <td>Stored in local SQLite so the app can control configured devices later</td>
+                    <td data-label="Data type">Device authentication and NETPIE credentials</td>
+                    <td data-label="Examples">Hashed device password, NETPIE Client ID, NETPIE token or password</td>
+                    <td data-label="Source">User input and device profile data</td>
+                    <td data-label="Storage">Stored in local SQLite so the app can control configured devices later</td>
                   </tr>
                   <tr>
-                    <td>WiFi setup data</td>
-                    <td>SSID, WiFi password, security flag, signal strength</td>
-                    <td>Device WiFi scan results and user input</td>
-                    <td>The WiFi password is sent to the device during setup and is not saved to SQLite by the current setup flow</td>
+                    <td data-label="Data type">WiFi setup data</td>
+                    <td data-label="Examples">SSID, WiFi password, security flag, signal strength</td>
+                    <td data-label="Source">Device WiFi scan results and user input</td>
+                    <td data-label="Storage">The WiFi password is sent to the device during setup and is not saved to SQLite by the current setup flow</td>
                   </tr>
                 </tbody>
               </table>
